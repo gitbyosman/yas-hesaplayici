@@ -12,24 +12,110 @@
   --card:#ffffff;
   --accent:#ff70b8;
   --muted:#6b6b6b;
+  --shadow:0 10px 30px rgba(0,0,0,0.1);
 }
 *{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
-body{margin:0;min-height:100vh;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;}
-.app{width:100%;max-width:420px;background:var(--card);border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.08);padding:22px;text-align:center;}
-.icon{width:72px;height:72px;margin:0 auto 12px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#ffd6e8,#ffb6df);}
-h1{margin:6px 0 2px;font-size:20px;color:#2b2b2b;}
-.subtitle{font-size:13px;color:var(--muted);margin-bottom:16px;}
-input[type="date"]{width:100%;padding:12px;border-radius:10px;border:1px solid #f0cde0;font-size:16px;background:#fff;}
-.btn{margin-top:12px;width:100%;padding:12px;border-radius:10px;background:var(--accent);color:#fff;border:none;font-size:16px;}
-.result{margin-top:18px;padding:14px;border-radius:10px;background:linear-gradient(180deg,#fff 0%,#fff8fb 100%);border:1px solid #fff0f6;font-size:16px;color:#333;white-space:pre-line;}
-.footer{margin-top:14px;font-size:12px;color:var(--muted);}
-.small{font-size:13px;color:var(--muted);margin-top:8px;}
+body{
+  margin:0;
+  min-height:100vh;
+  background:var(--bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.app{
+  width:100%;
+  max-width:420px;
+  background:var(--card);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:28px 24px;
+  text-align:center;
+  transition: transform 0.2s;
+}
+.app:hover{
+  transform: translateY(-4px);
+}
+.icon{
+  width:80px;
+  height:80px;
+  margin:0 auto 14px;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(180deg,#ffd6e8,#ffb6df);
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+h1{
+  margin:8px 0 4px;
+  font-size:22px;
+  color:#2b2b2b;
+  letter-spacing:0.5px;
+}
+.subtitle{
+  font-size:14px;
+  color:var(--muted);
+  margin-bottom:20px;
+}
+input[type="date"]{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #f0cde0;
+  font-size:16px;
+  background:#fff;
+  transition: 0.2s;
+}
+input[type="date"]:focus{
+  border-color:var(--accent);
+  outline:none;
+}
+.btn{
+  margin-top:16px;
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.2s;
+}
+.btn:hover{
+  background:#ff57a0;
+}
+.result{
+  margin-top:20px;
+  padding:16px;
+  border-radius:12px;
+  background:linear-gradient(180deg,#fff 0%,#fff8fb 100%);
+  border:1px solid #fff0f6;
+  font-size:16px;
+  color:#333;
+  white-space:pre-line;
+  transition:0.2s;
+}
+.footer{
+  margin-top:18px;
+  font-size:12px;
+  color:var(--muted);
+}
+.small{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:8px;
+  display:block;
+  text-align:left;
+}
 </style>
 </head>
 <body>
   <div class="app" role="application" aria-label="Yaş Hesaplayıcı">
     <div class="icon" aria-hidden="true">
-      <img src="icons/icon-192.png" alt="" style="width:56px;height:56px;border-radius:8px;">
+      <img src="icons/icon-192.png" alt="" style="width:56px;height:56px;border-radius:12px;">
     </div>
     <h1>Yaş Hesaplayıcı</h1>
     <div class="subtitle">Doğum tarihine göre yaşını öğren</div>
@@ -39,18 +125,18 @@ input[type="date"]{width:100%;padding:12px;border-radius:10px;border:1px solid #
     <button class="btn" id="calc">Hesapla</button>
 
     <div id="result" class="result" aria-live="polite">Doğum tarihi seçip "Hesapla" butonuna bas.</div>
-    <div class="footer">Offline destekli — Ana ekrana ekleyip uygulama gibi kullanabilirsin.</div>
+    <div class="footer">Bu uygulama yaşını hızlıca hesaplar — tasarım ve geliştirme: gitbyosman</div>
+
   </div>
 
 <script>
-// Set max to today
+// Max tarihi bugüne ayarla
 (function(){
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth()+1).padStart(2,'0');
   const dd = String(today.getDate()).padStart(2,'0');
-  const max = `${yyyy}-${mm}-${dd}`;
-  document.getElementById('birth').setAttribute('max', max);
+  document.getElementById('birth').setAttribute('max', `${yyyy}-${mm}-${dd}`);
 })();
 
 function hesapla() {
@@ -67,7 +153,6 @@ function hesapla() {
 
   if (gun < 0) {
     ay--;
-    // gün sayısını doğru hesapla: önceki ayın gün sayısı
     const prevMonthLastDay = new Date(simdi.getFullYear(), simdi.getMonth(), 0).getDate();
     gun += prevMonthLastDay;
   }
@@ -76,7 +161,6 @@ function hesapla() {
     ay += 12;
   }
 
-  // days until next birthday
   let nextBD = new Date(simdi.getFullYear(), dogum.getMonth(), dogum.getDate());
   if (nextBD < simdi) nextBD.setFullYear(nextBD.getFullYear() + 1);
   const diffDays = Math.ceil((nextBD - simdi) / (1000*60*60*24));
@@ -86,7 +170,7 @@ function hesapla() {
 
 document.getElementById('calc').addEventListener('click', hesapla);
 
-// register service worker
+// Service worker kaydı
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js').catch(function(err){
     console.log('SW register failed', err);
